@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { getProviders, getSession, signIn } from "next-auth/react";
 import Title, { Subtitle } from "@/atoms/Typography";
 import Input from "@/atoms/Input";
@@ -6,17 +6,21 @@ import Button from "@/atoms/Button";
 import Distance from "@/atoms/DistanceH";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import { IRegister } from "@/utils/types";
 
 const Login = ({ providers }) => {
-  const email = useRef("");
-  const password = useRef("");
+  const [registerCredentials, setRegisterCredentials] = useState<IRegister>({
+    fullName: "",
+    email: "",
+    password: "",
+  });
+
   const router = useRouter();
 
-  const onLogin = async () => {
+  const signUp = async () => {
     try {
       await signIn("credentials", {
-        email: email.current,
-        password: password.current,
+        ...registerCredentials,
         redirect: false,
       });
     } catch (e) {}
@@ -25,6 +29,13 @@ const Login = ({ providers }) => {
   const navigateToLogin = useCallback(() => {
     router.push("/auth/login");
   }, [router]);
+
+  const onChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>, key: keyof IRegister) => {
+      setRegisterCredentials((prev) => ({ ...prev, [key]: e.target.value }));
+    },
+    []
+  );
 
   return (
     <Container>
@@ -36,7 +47,8 @@ const Login = ({ providers }) => {
         <Input
           id="fullName"
           placeholder="Full name"
-          onChange={(e) => (email.current = e.target.value)}
+          value={registerCredentials.fullName}
+          onChange={(e) => onChange(e, "fullName")}
         />
         <Distance distance={29} />
         <Input
@@ -44,7 +56,8 @@ const Login = ({ providers }) => {
           type="email"
           id="email"
           placeholder="Email"
-          onChange={(e) => (password.current = e.target.value)}
+          value={registerCredentials.email}
+          onChange={(e) => onChange(e, "email")}
         />
         <Distance distance={29} />
         <Input
@@ -52,14 +65,15 @@ const Login = ({ providers }) => {
           type="password"
           id="password"
           placeholder="Password"
-          onChange={(e) => (password.current = e.target.value)}
+          value={registerCredentials.password}
+          onChange={(e) => onChange(e, "password")}
         />
         <Distance distance={22} />
         <Button isUnderlined isTextButton onClick={navigateToLogin}>
           Do have an account? Sign in.
         </Button>
         <Distance distance={52} />
-        <Button type="button" className="" onClick={onLogin}>
+        <Button type="button" className="" onClick={signUp}>
           Sign Up
         </Button>
       </form>

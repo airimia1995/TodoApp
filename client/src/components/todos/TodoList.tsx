@@ -26,7 +26,12 @@ const TodoList = () => {
       <Container>
         {filterTodoList.map((item) => (
           <>
-            <TodoItem todo={item} onChange={toggleTodo} onDelete={deleteTodo} />
+            <TodoItem
+              key={item.id}
+              todo={item}
+              onChange={toggleTodo}
+              onDelete={deleteTodo}
+            />
             <Distance distance={16} />
           </>
         ))}
