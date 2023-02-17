@@ -10,3 +10,9 @@ select:-webkit-autofill:focus{
     -webkit-box-shadow: 0 0 0 30px white inset !important;
     outline: none;
 }
+
+input[type="checkbox"] {
+    accent-color: #4a77e5;
+    width: 18px;
+    height: 18px;
+}

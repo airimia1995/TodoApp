@@ -1,14 +1,16 @@
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import { getProviders, getSession, signIn } from "next-auth/react";
 import Title, { Subtitle } from "@/atoms/Typography";
 import Input from "@/atoms/Input";
 import Button from "@/atoms/Button";
-import Distance from "@/atoms/Distance";
+import Distance from "@/atoms/DistanceH";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
 const Login = ({ providers }) => {
   const email = useRef("");
   const password = useRef("");
+  const router = useRouter();
 
   const onLogin = async () => {
     try {
@@ -19,6 +21,11 @@ const Login = ({ providers }) => {
       });
     } catch (e) {}
   };
+
+  const navigateToSignUp = useCallback(() => {
+    router.push("/auth/signUp");
+  }, [router]);
+
   return (
     <Container>
       <Title>Welcome back!</Title>
@@ -41,7 +48,7 @@ const Login = ({ providers }) => {
           onChange={(e) => (password.current = e.target.value)}
         />
         <Distance distance={22} />
-        <Button isUnderlined isTextButton onClick={onLogin}>
+        <Button isUnderlined isTextButton onClick={navigateToSignUp}>
           Don't have an account? Sign up.
         </Button>
         <Distance distance={52} />

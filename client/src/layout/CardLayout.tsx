@@ -11,7 +11,7 @@ const CardLayout = ({ children }: { children: React.ReactNode }) => {
         src="/images/logo.svg"
         height={32}
         width={40}
-        alt="Follow us on Twitter"
+        alt="todos"
       />
       <ChildrenContainer>{children}</ChildrenContainer>
     </Container>
