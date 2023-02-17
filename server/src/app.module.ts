@@ -3,7 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { TodoModule } from './todo/todo.modules';
-
+import { UserModule } from './users/user.modules';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     SequelizeModule.forRoot({
@@ -17,6 +18,8 @@ import { TodoModule } from './todo/todo.modules';
       synchronize: true,
     }),
     TodoModule,
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
