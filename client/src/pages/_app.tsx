@@ -7,8 +7,8 @@ import { GlobalStyles, lightTheme } from "@/utils/ThemeConfig";
 import AppLayout from "@/layout/AppLayout";
 import CardLayout from "@/layout/CardLayout";
 import "./styles.css";
-import 'bootstrap/dist/css/bootstrap.css'
-
+import "bootstrap/dist/css/bootstrap.css";
+import TodoProvider from "@/contexts/TodoContext";
 
 export default function App({
   Component,
@@ -18,11 +18,13 @@ export default function App({
     <ThemeProvider theme={lightTheme}>
       <GlobalStyles />
       <SessionProvider session={session}>
-        <AppLayout>
-          <CardLayout>
-            <Component {...pageProps} />
-          </CardLayout>
-        </AppLayout>
+        <TodoProvider>
+          <AppLayout>
+            <CardLayout>
+              <Component {...pageProps} />
+            </CardLayout>
+          </AppLayout>
+        </TodoProvider>
       </SessionProvider>
     </ThemeProvider>
   );
