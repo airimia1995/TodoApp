@@ -5,6 +5,9 @@ import type { Session } from "next-auth";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyles, lightTheme } from "@/utils/ThemeConfig";
 import AppLayout from "@/layout/AppLayout";
+import CardLayout from "@/layout/CardLayout";
+import "./styles.css";
+import 'bootstrap/dist/css/bootstrap.css'
 
 
 export default function App({
@@ -16,7 +19,9 @@ export default function App({
       <GlobalStyles />
       <SessionProvider session={session}>
         <AppLayout>
-          <Component {...pageProps} />
+          <CardLayout>
+            <Component {...pageProps} />
+          </CardLayout>
         </AppLayout>
       </SessionProvider>
     </ThemeProvider>

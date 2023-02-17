@@ -3,6 +3,8 @@ import { createGlobalStyle } from "styled-components"
 export const colors = {
     white: '#fff',
     lightGrey: '#f6f7f8',
+    borderGrey: '#e1e1e1',
+    subtitleGrey: '#a1a4ad',
     dark: '#1f2a4b',
     grey: '#9ea3b2',
     blue: '#4a77e5',
@@ -21,7 +23,10 @@ export const GlobalStyles = createGlobalStyle<{ theme: { body: string, text: str
   @font-face {
     font-family: MarkPro;
     src: url('/fonts/MarkPro.ttf');
-    font-weight: normal;
-    font-style: normal;
+  }
+ 
+  @font-face {
+    font-family: MarkProBold;
+    src: url('/fonts/MarkProBold.ttf');
   }
 `

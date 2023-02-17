@@ -1,72 +1,62 @@
 import { useRef } from "react";
 import { getProviders, getSession, signIn } from "next-auth/react";
+import Title, { Subtitle } from "@/atoms/Typography";
+import Input from "@/atoms/Input";
+import Button from "@/atoms/Button";
+import Distance from "@/atoms/Distance";
+import styled from "styled-components";
 
 const Login = ({ providers }) => {
   const email = useRef("");
   const password = useRef("");
 
-  const onLogin = async () => { 
+  const onLogin = async () => {
     try {
       await signIn("credentials", {
         email: email.current,
         password: password.current,
         redirect: false,
-      })
-    } catch(e) {
-
-    }
-  
-  }
+      });
+    } catch (e) {}
+  };
   return (
-    <div className="flex items-center min-h-screen p-4 bg-gray-100 lg:justify-center">
-      <div className="p-5 bg-white md:flex-1">
-
-        <form action="#" className="flex flex-col space-y-5">
-          <div className="flex flex-col space-y-1">
-            <label
-              htmlFor="email"
-              className="text-sm font-semibold text-gray-500"
-            >
-              Email address
-            </label>
-            <input
-              type="email"
-              id="email"
-              autoFocus
-              className="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-blue-200"
-              onChange={(e) => (email.current = e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col space-y-1">
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="password"
-                className="text-sm font-semibold text-gray-500"
-              >
-                Password
-              </label>
-            </div>
-            <input
-              type="password"
-              id="password"
-              className="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-blue-200"
-              onChange={(e) => (password.current = e.target.value)}
-            />
-          </div>
-          <div>
-            <button
-              type="button"
-              className="w-full px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-blue-500 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-blue-200 focus:ring-4"
-              onClick={onLogin}
-            >
-              Log in
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <Container>
+      <Title>Welcome back!</Title>
+      <Distance distance={6} />
+      <Subtitle>Log in to continue.</Subtitle>
+      <Distance distance={45} />
+      <form className="d-flex flex-column" action="#">
+        <Input
+          type="email"
+          id="email"
+          placeholder="Email"
+          onChange={(e) => (email.current = e.target.value)}
+        />
+        <Distance distance={29} />
+        <Input
+          autoComplete="off"
+          type="password"
+          id="password"
+          placeholder="Password"
+          onChange={(e) => (password.current = e.target.value)}
+        />
+        <Distance distance={22} />
+        <Button isUnderlined isTextButton onClick={onLogin}>
+          Don't have an account? Sign up.
+        </Button>
+        <Distance distance={52} />
+        <Button type="button" className="" onClick={onLogin}>
+          Log in
+        </Button>
+      </form>
+      <Distance distance={28} />
+    </Container>
   );
 };
+
+const Container = styled.div`
+  width: 330px;
+`
 export default Login;
 export async function getServerSideProps(context) {
   const { req } = context;
