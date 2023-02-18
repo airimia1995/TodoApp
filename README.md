@@ -5,20 +5,22 @@ Todo list app using NextJs (React) and NestJs (NodeJs)
 ------------------
 Start database
 
-cd fastStart
-docker-compose up -d
+> cd fastStart
+> docker-compose up -d
 
 ------------------
 Starting client
 
-cd client
-npm run dev
+> cd client
+> yarn
+> yarn dev
 
 ------------------
 Starting server
 
-cd server
-npm run start
+> cd server
+> yarn
+> yarn start
 
 
 --------------------
