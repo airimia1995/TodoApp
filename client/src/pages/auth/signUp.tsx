@@ -7,6 +7,7 @@ import Distance from "@/atoms/DistanceH";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { IRegister } from "@/utils/types";
+import axiosInstance from "@/axios";
 
 const Login = () => {
   const [registerCredentials, setRegisterCredentials] = useState<IRegister>({
@@ -19,10 +20,8 @@ const Login = () => {
 
   const signUp = async () => {
     try {
-      await signIn("credentials", {
-        ...registerCredentials,
-        redirect: false,
-      });
+      await axiosInstance(null).post("/user", registerCredentials);
+      navigateToLogin();
     } catch (e) {}
   };
 
