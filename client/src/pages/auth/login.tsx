@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { ILogin } from "@/utils/types";
 
-const Login = ({ providers }) => {
+const Login = () => {
   const [authCredentials, setAuthCredentials] = useState<ILogin>({
     email: "",
     password: "",
@@ -19,7 +19,7 @@ const Login = ({ providers }) => {
     try {
       await signIn("credentials", {
         ...authCredentials,
-        redirect: false,
+        // redirect: false,
       });
     } catch (e) {}
   };
@@ -76,13 +76,13 @@ const Container = styled.div`
   width: 330px;
 `;
 export default Login;
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: any) {
   const { req } = context;
   const session = await getSession({ req });
   const providers = await getProviders();
   if (session) {
     return {
-      redirect: { destination: "/" },
+      redirect: { destination: "/todos" },
     };
   }
   return {

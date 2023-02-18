@@ -16,7 +16,7 @@ const TodoItem = ({
     <div className="d-flex flex-row align-items-center justify-content-between">
       <div className="d-flex align-items-center">
         <Checkbox
-          defaultChecked={todo.isCompleted}
+          // defaultChecked={todo.isCompleted}
           checked={todo.isCompleted}
           onChange={() => {
             todo.id && onChange(todo.id);

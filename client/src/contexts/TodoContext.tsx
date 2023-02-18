@@ -1,5 +1,13 @@
 import { FilterBy, ITodo } from "@/utils/types";
-import { createContext, PropsWithChildren, useCallback, useState } from "react";
+import { useSession } from "next-auth/react";
+import {
+  createContext,
+  PropsWithChildren,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
+import axiosInstance from "@/axios";
 
 type ITodoContext = {
   todoList: ITodo[];
@@ -9,44 +17,85 @@ type ITodoContext = {
   toggleTodo: (id: string) => void;
   deleteTodo: (id: string) => void;
   createTodo: (title: string) => void;
+  loadTodos: () => void;
 };
 
 export const TodoContext = createContext({} as ITodoContext);
 
 const TodoProvider = ({ children }: PropsWithChildren<{}>) => {
-  const [todoList, setTodoList] = useState<ITodo[]>([
-    { id: "adas", title: "ada", isCompleted: false },
-    { id: "111", title: "2323", isCompleted: true },
-    { id: "2424", title: "asdasa", isCompleted: false },
-  ]);
+  const { data }: any = useSession();
+  const [todoList, setTodoList] = useState<ITodo[]>([]);
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
 
-  const toggleTodo = useCallback((id: string) => {
-    setTodoList((prev) => {
-      const todo = prev.find((t) => t.id === id);
-      if (todo) {
-        todo.isCompleted = !todo.isCompleted;
-      }
-      return [...prev];
-    });
-  }, []);
+  const api = useMemo(() => {
+    return axiosInstance(data?.token);
+  }, [data?.token]);
 
-  const deleteTodo = useCallback((id: string) => {
-    setTodoList((prev) => {
-      const todo = prev.find((t) => t.id === id);
-      if (todo) {
-        prev.splice(prev.indexOf(todo), 1);
-      }
-      return [...prev];
-    });
-  }, []);
+  const loadTodos = useCallback(async () => {
+    try {
+      const response = await api.get("/todo");
+      setTodoList(response.data.todos);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [api]);
 
-  const createTodo = useCallback((title: string) => {
-    setTodoList((prev) => {
+  const toggleTodo = useCallback(
+    async (id: string) => {
+      const todo = todoList.find((t) => t.id === id);
+      if (!todo) return;
+      setTodoList(
+        todoList.map((t) =>
+          t.id === id ? { ...t, isCompleted: !t.isCompleted } : t
+        )
+      );
+      try {
+        await api.put(`/todo/${id}`, {
+          ...todo,
+          isCompleted: !todo?.isCompleted,
+        });
+        await loadTodos();
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [todoList, api, loadTodos]
+  );
+
+  const deleteTodo = useCallback(
+    async (id: string) => {
+      setTodoList((prev) => {
+        const todo = prev.find((t) => t.id === id);
+        if (todo) {
+          prev.splice(prev.indexOf(todo), 1);
+        }
+        return [...prev];
+      });
+      try {
+        await api.delete(`/todo/${id}`);
+        await loadTodos();
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [api, loadTodos]
+  );
+
+  const createTodo = useCallback(
+    async (title: string) => {
       const todo = { id: "", title, isCompleted: false };
-      return [...prev, todo];
-    });
-  }, []);
+      setTodoList((prev) => {
+        return [...prev, todo];
+      });
+      try {
+        await api.post(`/todo`, todo);
+        await loadTodos();
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [api, loadTodos]
+  );
 
   return (
     <TodoContext.Provider
@@ -59,6 +108,7 @@ const TodoProvider = ({ children }: PropsWithChildren<{}>) => {
           toggleTodo,
           deleteTodo,
           createTodo,
+          loadTodos,
         } as ITodoContext
       }
     >

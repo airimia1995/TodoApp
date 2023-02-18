@@ -1,3 +1,3 @@
 export default function App() {
-    return <div>Hellloasdas</div>
+    return <div>Home</div>
 }

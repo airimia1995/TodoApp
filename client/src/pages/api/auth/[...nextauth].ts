@@ -6,12 +6,7 @@ export const authOptions: NextAuthOptions = {
 
   providers: [
     CredentialsProvider({
-      // The name to display on the sign in form (e.g. "Sign in with...")
       name: "Credentials",
-      // `credentials` is used to generate a form on the sign in page.
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
         email: {
           label: "Email",
@@ -25,9 +20,9 @@ export const authOptions: NextAuthOptions = {
         },
       },
 
-      async authorize(credentials, req) {
+      async authorize(credentials: any, req) {
         const { email, password } = credentials
-        const res = await fetch("http://localhost:3000/api/login", {
+        const res = await fetch("http://localhost:3002/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -37,16 +32,29 @@ export const authOptions: NextAuthOptions = {
             password,
           }),
         });
-        const user = await res.json();
-        if (res.ok && user) {
-          return user;
+
+        const token = await res.json();
+        if (res.ok && token) {
+          return {
+            id: token
+          };
         } else return null;
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user, account, profile, isNewUser }) {
+      return token;
+    },
+    async session({ session, token }: any) {
+      session['token'] = token.sub;
+      return session;
+    },
+  },
   pages: {
     signIn: '/auth/login',
-  }
+  },
+  secret: 'secretKey'
 }
 
 export default NextAuth(authOptions)

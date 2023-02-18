@@ -1,15 +1,18 @@
 import Distance from "@/atoms/DistanceH";
 import Input from "@/atoms/Input";
 import Title from "@/atoms/Typography";
+import axiosInstance from "@/axios";
 import TodoList from "@/components/todos/TodoList";
 import { TodoContext } from "@/contexts/TodoContext";
-import { useCallback, useContext, useRef, useState } from "react";
+import { getToken } from "next-auth/jwt";
+import { getSession, useSession } from "next-auth/react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-const Todos = () => {
+const Todos = (props: any) => {
   const [title, setTitle] = useState("");
-
-  const { createTodo } = useContext(TodoContext);
+  const { createTodo, loadTodos } = useContext(TodoContext);
+  const { status } = useSession();
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -24,6 +27,12 @@ const Todos = () => {
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   }, []);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      loadTodos();
+    }
+  }, [status, loadTodos]);
 
   return (
     <Container className="d-flex flex-column">
@@ -45,5 +54,20 @@ const Todos = () => {
 const Container = styled.div`
   width: 440px;
 `;
-
 export default Todos;
+export async function getServerSideProps(context: any) {
+  const { req } = context;
+  const token = await getToken({ req });
+  const session = await getSession({ req });
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: {} };
+}

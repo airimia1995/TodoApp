@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { IRegister } from "@/utils/types";
 
-const Login = ({ providers }) => {
+const Login = () => {
   const [registerCredentials, setRegisterCredentials] = useState<IRegister>({
     fullName: "",
     email: "",
@@ -86,7 +86,7 @@ const Container = styled.div`
   width: 390px;
 `;
 export default Login;
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: any) {
   const { req } = context;
   const session = await getSession({ req });
   const providers = await getProviders();

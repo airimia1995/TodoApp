@@ -1,6 +1,6 @@
 import Distance from "@/atoms/DistanceH";
 import { TodoContext } from "@/contexts/TodoContext";
-import { FilterBy } from "@/utils/types";
+import { FilterBy, ITodo } from "@/utils/types";
 import { useContext, useMemo } from "react";
 import styled from "styled-components";
 import Filter from "./Filter";
@@ -11,13 +11,21 @@ const TodoList = () => {
     useContext(TodoContext);
 
   const filterTodoList = useMemo(() => {
+    const sorted = (list: ITodo[]) => {
+      return list.sort(function (a, b) {
+        return (
+          new Date(b.createdAt || "").getTime() -
+          new Date(a.createdAt || "").getTime()
+        );
+      });
+    };
     switch (filterBy) {
       case FilterBy.All:
-        return todoList;
+        return sorted(todoList);
       case FilterBy.Completed:
-        return todoList.filter((item) => item.isCompleted);
+        return sorted(todoList.filter((item) => item.isCompleted));
       case FilterBy.Incompleted:
-        return todoList.filter((item) => !item.isCompleted);
+        return sorted(todoList.filter((item) => !item.isCompleted));
     }
   }, [filterBy, todoList]);
 
