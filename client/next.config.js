@@ -4,7 +4,6 @@ const nextConfig = {
     appDir: true,
   },
   compiler: {
-    // Enables the styled-components SWC transform
     styledComponents: true
   },
   async redirects() {
