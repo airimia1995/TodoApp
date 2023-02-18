@@ -24,5 +24,3 @@ Starting server
 
 
 --------------------
-
-!!! the app has a small flickering because the styled components are not rendering properly in nextJs 13 !!!
