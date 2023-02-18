@@ -1,10 +1,12 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
   Post,
+  Put,
   Res,
 } from '@nestjs/common';
 import { Todo } from './todo.model';
@@ -16,7 +18,7 @@ export class TodoController {
 
   @Post()
   async createTodo(@Res() response, @Body() todo: Todo) {
-    const newTodo = await this.todoService.createTodo(todo);
+    const newTodo = await this.todoService.createTodo(todo, response.user.id);
     return response.status(HttpStatus.CREATED).json({
       newTodo,
     });
@@ -24,17 +26,25 @@ export class TodoController {
 
   @Get()
   async fetchAll(@Res() response) {
-    const todos = await this.todoService.findAll();
+    const todos = await this.todoService.findAll(response.user.id);
     return response.status(HttpStatus.OK).json({
       todos,
     });
   }
 
-  @Get('/:id')
-  async findById(@Res() response, @Param('id') id) {
-    const todos = await this.todoService.findOne(id);
+  @Put('/:id')
+  async update(@Res() response, @Param('id') id, @Body() todo: Todo) {
+    const number = await this.todoService.update(id, todo, response.user.id);
     return response.status(HttpStatus.OK).json({
-      todos,
+      number,
+    });
+  }
+
+  @Delete('/:id')
+  async delete(@Res() response, @Param('id') id) {
+    const number = await this.todoService.delete(id, response.user.id);
+    return response.status(HttpStatus.OK).json({
+      number,
     });
   }
 }

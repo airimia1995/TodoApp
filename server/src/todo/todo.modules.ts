@@ -12,11 +12,13 @@ import { TodoService } from './todo.service';
 })
 export class TodoModule {
   public configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes(
-      { path: '/todo', method: RequestMethod.GET },
-      { path: '/todo', method: RequestMethod.POST },
-      // { path: '/users/:id', method: RequestMethod.PUT },
-      // { path: '/users/:id', method: RequestMethod.DELETE },
-    );
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes(
+        { path: '/todo', method: RequestMethod.GET },
+        { path: '/todo', method: RequestMethod.POST },
+        { path: '/todo/:id', method: RequestMethod.PUT },
+        { path: '/todo/:id', method: RequestMethod.DELETE },
+      );
   }
 }

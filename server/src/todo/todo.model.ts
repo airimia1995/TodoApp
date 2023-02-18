@@ -1,4 +1,5 @@
-import { Column, Model, Table } from 'sequelize-typescript';
+import { Column, ForeignKey, Model, Table } from 'sequelize-typescript';
+import { User } from 'src/users/user.model';
 
 @Table
 export class Todo extends Model {
@@ -7,4 +8,8 @@ export class Todo extends Model {
 
   @Column
   isCompleted: boolean;
+
+  @ForeignKey(() => User)
+  @Column
+  userId: number;
 }
