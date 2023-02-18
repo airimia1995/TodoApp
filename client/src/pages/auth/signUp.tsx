@@ -38,7 +38,7 @@ const Login = () => {
 
   return (
     <Container>
-      <Title>Welcome back!</Title>
+      <Title>Welcome!</Title>
       <Distance distance={6} />
       <Subtitle>Sign up to start using Simpledo today.</Subtitle>
       <Distance distance={43} />

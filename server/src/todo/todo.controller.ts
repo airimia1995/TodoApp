@@ -47,4 +47,24 @@ export class TodoController {
       number,
     });
   }
+
+  @Put('/markTodoCompleted/:id')
+  async markTodoCompleted(@Res() response, @Param('id') id) {
+    const todo = await this.todoService.findOne(id, response.user.id);
+    todo.isCompleted = true;
+    await todo.save();
+    return response.status(HttpStatus.OK).json({
+      todo,
+    });
+  }
+
+  @Put('/markTodoUncompleted/:id')
+  async markTodoUncompleted(@Res() response, @Param('id') id) {
+    const todo = await this.todoService.findOne(id, response.user.id);
+    todo.isCompleted = false;
+    await todo.save();
+    return response.status(HttpStatus.OK).json({
+      todo,
+    });
+  }
 }

@@ -17,6 +17,8 @@ export class TodoModule {
       .forRoutes(
         { path: '/todo', method: RequestMethod.GET },
         { path: '/todo', method: RequestMethod.POST },
+        { path: '/todo/markTodoUncompleted/:id', method: RequestMethod.PUT },
+        { path: '/todo/markTodoCompleted/:id', method: RequestMethod.PUT },
         { path: '/todo/:id', method: RequestMethod.PUT },
         { path: '/todo/:id', method: RequestMethod.DELETE },
       );

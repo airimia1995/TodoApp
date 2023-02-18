@@ -50,10 +50,15 @@ const TodoProvider = ({ children }: PropsWithChildren<{}>) => {
         )
       );
       try {
-        await api.put(`/todo/${id}`, {
-          ...todo,
-          isCompleted: !todo?.isCompleted,
-        });
+        if (todo.isCompleted) {
+          await api.put(`/todo/markTodoUncompleted/${id}`);
+        } else {
+          await api.put(`/todo/markTodoCompleted/${id}`);
+        }
+        // await api.put(`/todo/${id}`, {
+        //   ...todo,
+        //   isCompleted: !todo?.isCompleted,
+        // });
         await loadTodos();
       } catch (e) {
         console.error(e);
