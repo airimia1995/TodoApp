@@ -2,14 +2,13 @@ import { SessionProvider } from "next-auth/react";
 
 import type { AppProps } from "next/app";
 import type { Session } from "next-auth";
-import { ServerStyleSheet, ThemeProvider } from "styled-components";
+import { ThemeProvider } from "styled-components";
 import { GlobalStyles, lightTheme } from "@/utils/ThemeConfig";
 import AppLayout from "@/layout/AppLayout";
 import CardLayout from "@/layout/CardLayout";
 import "./styles.css";
 import "bootstrap/dist/css/bootstrap.css";
 import TodoProvider from "@/contexts/TodoContext";
-import StyledComponentsRegistry from "@/layout/StyledComponentsRegistry";
 
 function App({
   Component,
@@ -20,13 +19,11 @@ function App({
       <GlobalStyles />
       <SessionProvider session={session}>
         <TodoProvider>
-          <StyledComponentsRegistry>
-            <AppLayout>
-              <CardLayout>
-                <Component {...pageProps} />
-              </CardLayout>
-            </AppLayout>
-          </StyledComponentsRegistry>
+          <AppLayout>
+            <CardLayout>
+              <Component {...pageProps} />
+            </CardLayout>
+          </AppLayout>
         </TodoProvider>
       </SessionProvider>
     </ThemeProvider>
